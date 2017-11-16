@@ -11,9 +11,9 @@ import Periphery from '@/components/Periphery/Periphery'
 import PlanningImplementation from '@/components/PlanningImplementation/PlanningImplementation'
 import Login from '@/components/Login/Login' 
  
-Vue.use(Router)
+Vue.use(Router);
 
-export default new Router({
+var routers=new Router({
   routes: [
     {
       path: '/briefinglist',
@@ -58,3 +58,17 @@ export default new Router({
     { path: '/', redirect: '/login' },
   ]
 })
+
+routers.beforeEach((to,from,next) => {
+    if(to.path == '/login'){
+        next()
+    }else{
+        if(window.localStorage.jianbaotoken && window.localStorage.jianbaotoken == 'login'){
+            next()
+        }else{
+            next('/login')
+        }
+    }
+})
+
+export default routers;

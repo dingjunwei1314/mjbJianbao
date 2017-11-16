@@ -77,8 +77,8 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             if(_this.ruleForm2.userName == 'admin123' && _this.ruleForm2.userPwd == '123456'){
+              window.localStorage.jianbaotoken='login';
               _this.$router.push('/BriefingList')
-              localStorage.token='login';
             }else{
               this.$message({
                 type: 'warning',

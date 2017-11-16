@@ -1,63 +1,69 @@
 <template>
     <div class="DesignList">
+      <router-link to="/BriefingList">返回主页</router-link>
       <h4>规划设计简报</h4>
       <el-button type="primary" style="float:right;margin-bottom:20px" @click="addNew">添加新报告</el-button>
       <el-table
-      :data="allData.qualityList"
+      :data="allData.lists"
       border
       v-loading="is_loading_tab"
       @row-click="rowClick"
       style="width: 100%;cursor:pointer">
         <el-table-column
-          prop="name"
+          width="100"
+          prop="submitMan"
           label="录入人">
         </el-table-column>
         <el-table-column
-          prop="city"
-          label="城市">
-        </el-table-column>
-        <el-table-column
-          prop="buildingName"
+          prop="buidingName"
           label="楼盘名称">
         </el-table-column>
         <el-table-column
-          prop="comScore"
+          prop="planningDesign"
           label="规划设计评分（总体）">
         </el-table-column>
         <el-table-column
-          prop="recommendation"
+          prop="recommend"
           label="推荐点">
         </el-table-column>
         <el-table-column
-          prop="layoutScore"
+          prop="houseTypeDesignGrade"
           label="户型规划评分">
         </el-table-column>
         <el-table-column
-          prop="banScore"
+          prop="houseTypeDesignGrade"
           label="楼栋规划评分">
         </el-table-column>
         <el-table-column
-          prop="parkScore"
+          prop="parkDesignGrade"
           label="园区规划评分">
         </el-table-column>
         <el-table-column
-          prop="creatTime"
+          width="100"
+          label="状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.isOnline==2">在线</span>  
+            <span v-if="scope.row.isOnline==1">离线</span>  
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="createTime"
           label="创建时间">
         </el-table-column>
         <el-table-column
-          prop="lastEditTime"
+          prop="submitTime"
           label="最后一次编辑时间">
         </el-table-column>
       </el-table>
 
       <el-pagination
-        v-show="allData.rowCount>0"
+        v-show="allData.pageCount>0"
         style="margin: 0 auto;text-align:center;margin-top:20px"
         layout="prev, pager, next"
         :page-size=10
         :currentPage="currentPage"
         @current-change="currentChange"
-        :total="allData.rowCount">
+        :total="allData.pageCount">
       </el-pagination>
     </div>
 </template>
@@ -84,26 +90,21 @@ export default {
         }
       };
     },
-    created(){
-      this.getdata()
+    mounted(){
+
+      this.getdata();
     },
     methods: {
+
       getdata(){
         let _this = this,
             body = this.form;
             _this.is_loading_tab=true;
-        this.$http('/BuildQuality/list',{body},{},{},'post').then(function(res){
+        this.$http('/buidingPlanDesign/list',{body},{},{},'post').then(function(res){
             
             if(res.data.code==0){
-                if(res.data.response.status==1){
-                  _this.allData=res.data.response.data;
-                }else{
-                  _this.$message({
-                    message: res.data.response.message,
-                    type: 'warning'
-                  });
-                }
-            }else if(data.code==300){
+                _this.allData=res.data.response;
+            }else if(res.data.code==300){
                 _this.$router.push('/login')
             }else{
                 _this.$message({
@@ -118,14 +119,20 @@ export default {
         })
       },
       currentChange(val){
-        this.form.pageNum = val-1
+        this.form.pageNum = val-1;
         this.getdata()
       },
       rowClick(row){
-        this.$router.push({path:'/design',query:{id:row.id}})
+        let params = {};
+        if(row.isOnline == '2'){
+          params = {path:'/design',query:{id:row.id,type:'edit',isOnline:2}}
+        }else{
+          params = {path:'/design',query:{id:row.id,type:'edit'}}
+        }
+        this.$router.push(params)
       },
       addNew(){
-        this.$router.push('/design')
+        this.$router.push({path:'/design',query:{type:'add'}})
       }
     }
   }

@@ -24,7 +24,7 @@
           <el-col :span="4">
             <el-card :body-style="{ padding: '0px' }">
               <div style="padding: 14px;">
-                <span>周报配套简报</span>
+                <span>周边配套简报</span>
                 <div class="bottom clearfix">
                   <el-button type="text" class="button" @click="enter('/peripherylist')">进入</el-button>
                 </div>
@@ -65,5 +65,5 @@ export default {
 </script>
 
 <style scoped>
-  .BriefingList{padding-top: 200px}
+  .BriefingList{padding-top: 200px;max-width: 1200px;margin: 0 auto}
 </style>

@@ -4,7 +4,7 @@ export default function uploader(successfunc,successfunc2,errfunc,func,btnName){
   let _this=this;
   var uptoken='';
   var uploader='';
-  axios.get('http://192.168.1.34:8088/backstageUser/qiniuToken').then(function(res){
+  axios.get('http://47.93.185.205:8082/maijiabangReport-1.0-SNAPSHOT/backstageUser/qiniuToken').then(function(res){
 	uptoken=res.data.response.qiNiuToken;
 	// var Qiniu = new QiniuJsSDK();
 	uploader = Qiniu.uploader({
@@ -77,7 +77,6 @@ export default function uploader(successfunc,successfunc2,errfunc,func,btnName){
 	             var sourceLink = domain +"/"+ res.key; 
 	             successfunc2(res.key)
 	             // 获取上传成功后的文件的Url
-	           
 	      },
 	      'Error': function(up, err, errTip) {
 	            //上传出错时，处理相关的事情
@@ -91,7 +90,7 @@ export default function uploader(successfunc,successfunc2,errfunc,func,btnName){
 	          // 该配置必须要在unique_names: false，save_key: false时才生效
 
 	          // var key = "文章"+'123';
-	          var key = "jianbao_"+new Date().getTime()+'.jpg'
+	          var key = "jianbao_"+new Date().getTime()+'.jpg';
 	          // do something with key here
 	          return key
 	      }
